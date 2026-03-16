@@ -1,0 +1,17 @@
+{
+  "name": "Tasks - Gerenciador de Tarefas",
+  "short_name": "Tasks",
+  "description": "Gerenciador de tarefas inteligente com IA",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#f5f6f8",
+  "theme_color": "#6352d2",
+  "orientation": "portrait-primary",
+  "icons": [
+    {
+      "src": "/favicon.ico",
+      "sizes": "64x64",
+      "type": "image/x-icon"
+    }
+  ]
+}

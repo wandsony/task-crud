@@ -1,0 +1,356 @@
+{
+  "info": {
+    "name": "Task-CRUD-API",
+    "_postman_id": "task-crud-api-collection",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    {
+      "key": "base_url",
+      "value": "https://jukjjkfbuhdnzbtmrdmz.supabase.co"
+    },
+    {
+      "key": "apikey",
+      "value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imp1a2pqa2ZidWhkbnpidG1yZG16Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzE3MTU3NjIsImV4cCI6MjA4NzI5MTc2Mn0.D1hPvV4E6h-O9E9T2XWUGiGVSFcKrLI4wQqoCzCoGS4"
+    },
+    {
+      "key": "access_token",
+      "value": ""
+    }
+  ],
+  "auth": {
+    "type": "bearer",
+    "bearer": [
+      {
+        "key": "token",
+        "value": "{{access_token}}"
+      }
+    ]
+  },
+  "event": [
+    {
+      "listen": "prerequest",
+      "script": {
+        "type": "text/javascript",
+        "exec": []
+      }
+    }
+  ],
+  "item": [
+    {
+      "name": "Auth",
+      "item": [
+        {
+          "name": "Login",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "var jsonData = pm.response.json();",
+                  "if (jsonData.access_token) {",
+                  "    pm.collectionVariables.set('access_token', jsonData.access_token);",
+                  "    console.log('Token salvo automaticamente!');",
+                  "}"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "auth": { "type": "noauth" },
+            "method": "POST",
+            "header": [
+              { "key": "apikey", "value": "{{apikey}}" },
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"seu@email.com\",\n  \"password\": \"suaSenha\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/auth/v1/token?grant_type=password",
+              "host": ["{{base_url}}"],
+              "path": ["auth", "v1", "token"],
+              "query": [{ "key": "grant_type", "value": "password" }]
+            }
+          }
+        },
+        {
+          "name": "Signup",
+          "request": {
+            "auth": { "type": "noauth" },
+            "method": "POST",
+            "header": [
+              { "key": "apikey", "value": "{{apikey}}" },
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"novo@email.com\",\n  \"password\": \"senhaSegura123\",\n  \"data\": {\n    \"display_name\": \"Meu Nome\"\n  }\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/auth/v1/signup",
+              "host": ["{{base_url}}"],
+              "path": ["auth", "v1", "signup"]
+            }
+          }
+        },
+        {
+          "name": "Get User",
+          "request": {
+            "method": "GET",
+            "header": [
+              { "key": "apikey", "value": "{{apikey}}" }
+            ],
+            "url": {
+              "raw": "{{base_url}}/auth/v1/user",
+              "host": ["{{base_url}}"],
+              "path": ["auth", "v1", "user"]
+            }
+          }
+        },
+        {
+          "name": "Recover Password",
+          "request": {
+            "auth": { "type": "noauth" },
+            "method": "POST",
+            "header": [
+              { "key": "apikey", "value": "{{apikey}}" },
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"seu@email.com\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/auth/v1/recover",
+              "host": ["{{base_url}}"],
+              "path": ["auth", "v1", "recover"]
+            }
+          }
+        },
+        {
+          "name": "Logout",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "apikey", "value": "{{apikey}}" }
+            ],
+            "url": {
+              "raw": "{{base_url}}/auth/v1/logout",
+              "host": ["{{base_url}}"],
+              "path": ["auth", "v1", "logout"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Tasks",
+      "item": [
+        {
+          "name": "List All Tasks",
+          "request": {
+            "method": "GET",
+            "header": [
+              { "key": "apikey", "value": "{{apikey}}" }
+            ],
+            "url": {
+              "raw": "{{base_url}}/rest/v1/tasks?select=*&order=created_at.desc",
+              "host": ["{{base_url}}"],
+              "path": ["rest", "v1", "tasks"],
+              "query": [
+                { "key": "select", "value": "*" },
+                { "key": "order", "value": "created_at.desc" }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Get Task by ID",
+          "request": {
+            "method": "GET",
+            "header": [
+              { "key": "apikey", "value": "{{apikey}}" }
+            ],
+            "url": {
+              "raw": "{{base_url}}/rest/v1/tasks?id=eq.TASK_ID_AQUI&select=*",
+              "host": ["{{base_url}}"],
+              "path": ["rest", "v1", "tasks"],
+              "query": [
+                { "key": "id", "value": "eq.TASK_ID_AQUI" },
+                { "key": "select", "value": "*" }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Filter by Status",
+          "request": {
+            "method": "GET",
+            "header": [
+              { "key": "apikey", "value": "{{apikey}}" }
+            ],
+            "url": {
+              "raw": "{{base_url}}/rest/v1/tasks?status=eq.TODO&select=*",
+              "host": ["{{base_url}}"],
+              "path": ["rest", "v1", "tasks"],
+              "query": [
+                { "key": "status", "value": "eq.TODO" },
+                { "key": "select", "value": "*" }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Search by Title",
+          "request": {
+            "method": "GET",
+            "header": [
+              { "key": "apikey", "value": "{{apikey}}" }
+            ],
+            "url": {
+              "raw": "{{base_url}}/rest/v1/tasks?title=ilike.%25texto%25&select=*",
+              "host": ["{{base_url}}"],
+              "path": ["rest", "v1", "tasks"],
+              "query": [
+                { "key": "title", "value": "ilike.%25texto%25" },
+                { "key": "select", "value": "*" }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Create Task",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "apikey", "value": "{{apikey}}" },
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Prefer", "value": "return=representation" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"title\": \"Minha nova task\",\n  \"description\": \"Descrição da task\",\n  \"status\": \"TODO\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/rest/v1/tasks",
+              "host": ["{{base_url}}"],
+              "path": ["rest", "v1", "tasks"]
+            }
+          }
+        },
+        {
+          "name": "Update Task",
+          "request": {
+            "method": "PATCH",
+            "header": [
+              { "key": "apikey", "value": "{{apikey}}" },
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Prefer", "value": "return=representation" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"title\": \"Título atualizado\",\n  \"status\": \"DOING\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/rest/v1/tasks?id=eq.TASK_ID_AQUI",
+              "host": ["{{base_url}}"],
+              "path": ["rest", "v1", "tasks"],
+              "query": [
+                { "key": "id", "value": "eq.TASK_ID_AQUI" }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Delete Task",
+          "request": {
+            "method": "DELETE",
+            "header": [
+              { "key": "apikey", "value": "{{apikey}}" }
+            ],
+            "url": {
+              "raw": "{{base_url}}/rest/v1/tasks?id=eq.TASK_ID_AQUI",
+              "host": ["{{base_url}}"],
+              "path": ["rest", "v1", "tasks"],
+              "query": [
+                { "key": "id", "value": "eq.TASK_ID_AQUI" }
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Profiles",
+      "item": [
+        {
+          "name": "Get My Profile",
+          "request": {
+            "method": "GET",
+            "header": [
+              { "key": "apikey", "value": "{{apikey}}" }
+            ],
+            "url": {
+              "raw": "{{base_url}}/rest/v1/profiles?select=*",
+              "host": ["{{base_url}}"],
+              "path": ["rest", "v1", "profiles"],
+              "query": [
+                { "key": "select", "value": "*" }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Update Profile",
+          "request": {
+            "method": "PATCH",
+            "header": [
+              { "key": "apikey", "value": "{{apikey}}" },
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Prefer", "value": "return=representation" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"display_name\": \"Novo Nome\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/rest/v1/profiles?user_id=eq.USER_ID_AQUI",
+              "host": ["{{base_url}}"],
+              "path": ["rest", "v1", "profiles"],
+              "query": [
+                { "key": "user_id", "value": "eq.USER_ID_AQUI" }
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "AI Chat",
+      "item": [
+        {
+          "name": "Chat with AI",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "apikey", "value": "{{apikey}}" },
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"messages\": [\n    {\n      \"role\": \"user\",\n      \"content\": \"Me ajude a priorizar minhas tarefas\"\n    }\n  ]\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/functions/v1/task-chat",
+              "host": ["{{base_url}}"],
+              "path": ["functions", "v1", "task-chat"]
+            }
+          }
+        }
+      ]
+    }
+  ]
+}
